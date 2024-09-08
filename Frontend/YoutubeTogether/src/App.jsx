@@ -4,8 +4,9 @@ import axios from 'axios';
 import Overlay from './Overlay';
 import { FaPaperPlane, FaYoutube } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
+const apiUrl = import.meta.env.VITE_API_URL;
 
-const socket = io('http://192.168.0.118:3001/'); // Backend URL
+const socket = io(apiUrl); // Backend URL
 
 const App = () => {
   const [roomCode, setRoomCode] = useState('');
@@ -45,7 +46,7 @@ const App = () => {
   // Create a new room
   const createRoom = async () => {
     try {
-      const response = await axios.post('http://192.168.0.118:3001/createRoom');
+      const response = await axios.post(apiUrl + 'createRoom');
       const newRoomCode = await response.data.roomCode;
       setRoomCode(newRoomCode);
       setIsAdmin(true)
@@ -60,7 +61,7 @@ const App = () => {
   // Join an existing room
   const joinRoom = async () => {
     try {
-      const response = await axios.post('http://192.168.0.118:3001/joinRoom', { roomCode: roomInput});
+      const response = await axios.post( apiUrl + 'joinRoom', { roomCode: roomInput});
       if (response.data.success) {
         setRoomCode(roomInput);
         socket.emit('joinRoom', roomInput); // Join the room
