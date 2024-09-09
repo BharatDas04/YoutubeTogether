@@ -31,6 +31,10 @@ const generateRoomCode = () => {
   return code;
 };
 
+app.get("/ping", (req, res) => {
+  res.json({ valid: "valid" });
+});
+
 app.post("/createRoom", (req, res) => {
   const roomCode = generateRoomCode();
   rooms[roomCode] = { users: [], playing: [""] };
