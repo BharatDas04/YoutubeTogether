@@ -84,7 +84,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("seek", (data) => {
-    console.log("seeked");
     const { roomCode, currentTime } = data;
     io.to(roomCode).emit("seek", { currentTime: currentTime });
   });

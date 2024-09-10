@@ -21,6 +21,7 @@ const App = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const [vidLink, setVidLink] = useState("")
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Scroll to the bottom whenever a new message is added
@@ -45,6 +46,7 @@ const App = () => {
 
   // Create a new room
   const createRoom = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post(apiUrl + 'createRoom');
       const newRoomCode = await response.data.roomCode;
@@ -55,11 +57,14 @@ const App = () => {
       setIsOpen(false)
     } catch (error) {
       console.error('Error creating room', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Join an existing room
   const joinRoom = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post( apiUrl + 'joinRoom', { roomCode: roomInput});
       if (response.data.success) {
@@ -71,6 +76,8 @@ const App = () => {
       }
     } catch (error) {
       console.error('Error joining room', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -153,7 +160,7 @@ const App = () => {
 
   return (
     <>
-    <Overlay isOpen={isOpen} joinRoom={joinRoom} setRoomInput={setRoomInput} setNameInput={setNameInput} createRoom={createRoom} />
+    <Overlay isLoading={isLoading} isOpen={isOpen} joinRoom={joinRoom} setRoomInput={setRoomInput} roomInput={roomInput} setNameInput={setNameInput} nameInput={nameInput} createRoom={createRoom} />
     <div className='flex flex-col h-screen bg-[#0a1012]'>
       <div className='flex gap-10 py-2 px-5'>
         <div><p className='text-gray-700 mukta-regular text-xs font-bold'>FAQ</p></div>
